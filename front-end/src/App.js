@@ -22,6 +22,7 @@ import Editmod from "./Component/Module/Editmod";
 import Deletemod from "./Component/Module/Deletemod";
 import Addmod from "./Component/Module/Addmod";
 import Viewmod from "./Component/Module/Viewmod";
+import LecMaterial from "./Component/LecMaterial";
 
 
 function App() {
@@ -48,6 +49,8 @@ function App() {
           <Route path="/module/viewmod/:id" element={<Viewmod />} />
           <Route path="/module/editmod/:id" element={<Editmod />} />
           <Route path="/module/deletemod/:id" element={<Deletemod />} />
+
+          <Route path="/file/" element={<LecMaterial />} />
         </Routes>
       </BrowserRouter>
     </>
