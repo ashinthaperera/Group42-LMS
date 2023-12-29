@@ -5,6 +5,9 @@ const dotenv = require("dotenv");
 const app = express();
 //const cors = require('cors');
 
+//file up
+app.use("/files",express.static("files"))
+
 //security
 var cors = require('cors');
 app.use(cors());
@@ -18,6 +21,7 @@ const studentRouter = require("./routes/studentRouter");
 const moduleRouter = require("./routes/moduleRouter");
 
 const lectureRouter = require('./routes/lectureRouter');
+const lecMaterialRouter = require('./routes/lecMaterialRouter');
 
 
 dotenv.config();
@@ -27,6 +31,7 @@ app.use(express.json());
 app.use(studentRouter);
 app.use(lectureRouter);
 app.use(moduleRouter);
+app.use(lecMaterialRouter);
 
 //checking the connection of db
 mongoose.connect(process.env.Database).then(()=>{

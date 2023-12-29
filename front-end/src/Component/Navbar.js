@@ -46,6 +46,15 @@ export default function Navbar() {
             </li>
           </ul>
         </div>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <Link className="nav-link text-white" to="/file">
+                Add Lecturer-Material
+              </Link>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   );
