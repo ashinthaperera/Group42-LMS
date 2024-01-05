@@ -13,7 +13,7 @@ export const userSlice = createSlice({
       state.user = action.payload;
     },
     logoutUserAction: () => {},
-    // refreshAction: () => {},
+    refreshAction: () => {},
   },
 });
 
@@ -23,7 +23,7 @@ export const {
   getUserAction,
   saveUserAction,
   logoutUserAction,
-//   refreshAction,
+  refreshAction,
 } = userSlice.actions;
 
 //selectors

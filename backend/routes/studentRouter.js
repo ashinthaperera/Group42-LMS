@@ -12,10 +12,10 @@ studentRouter.post("/student/addstud",async(req,res)=>{
     console.log(req.body);
 
     //add structure json data structure order
-    const {firstName,lastName,address,dob,contactNumber} = req.body;
+    const {firstName,lastName,email,address,dob,contactNumber} = req.body;
 
     //validation
-    if(!firstName || !lastName || !address || !dob ||!contactNumber){
+    if(!firstName || !lastName || !address || !email || !dob ||!contactNumber){
         res.status(404).json("please fill the Data");
     }
     
@@ -27,7 +27,7 @@ studentRouter.post("/student/addstud",async(req,res)=>{
         }
         //if the data doesnt exist then sent to the db
         else{
-            const addstudent = new students({firstName,lastName,address,dob,contactNumber});
+            const addstudent = new students({firstName,lastName,email,address,dob,contactNumber});
             const studData = await addstudent.save();
             // console.log(studData+" Hi ashi ");
             // res.send(studData); //error

@@ -26,8 +26,21 @@ import LecMaterial from "./Component/LecMaterial";
 import ModSubmission from "./Component/ModSubmission";
 import Login from "./pages/Login/LoginPage";
 import StudModSubmission from "./Component/StudModSubmission";
+// import PrivateRoutes, { LecturerPrivateRoutes, StudentPrivateRoutes } from "./routes/privateRoutes";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getUserAction, refreshAction } from "./redux/user/userSlice";
+import { AdminPrivateRoutes } from "./routes/privateRouteAdmin";
+import { LecturerPrivateRoutes } from "./routes/privateRouteLecturer";
+import { StudentPrivateRoutes } from "./routes/privateRouteStudent";
+import { LoggedPrivateRoutes } from "./routes/privateRoutes";
+// import AdminPrivateRoutes from "./routes/privateRoutes";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUserAction(), refreshAction());
+  });
   return (
     <>
       <CssBaseline />
@@ -35,6 +48,10 @@ function App() {
         <h1>React APP</h1>
         <Navbar />
         <Routes>
+          <Route path="/" element={<Login />} />
+
+          {/* <Route element={<LoggedPrivateRoutes />}> */}
+          
           <Route path="/student/" element={<Allstud />} />
           <Route path="/student/addstud" element={<Addstud />} />
           <Route path="/student/editstud/:id" element={<Editstud />} />
@@ -53,11 +70,15 @@ function App() {
           <Route path="/module/editmod/:id" element={<Editmod />} />
           <Route path="/module/deletemod/:id" element={<Deletemod />} />
 
+          {/* <Route element ={<LecturerPrivateRoutes />} > */}
           <Route path="/file/" element={<LecMaterial />} />
           <Route path="/modulefile/" element={<ModSubmission />} />
-          <Route path="/studentfile/" element={<StudModSubmission />} />
+          {/* </Route> */}
 
-          <Route path="/" element={<Login />} />
+          {/* <Route element ={<StudentPrivateRoutes />} > */}
+          <Route path="/studentfile/" element={<StudModSubmission />} />
+          {/* </Route> */}
+          {/* </Route> */}
         </Routes>
       </BrowserRouter>
     </>

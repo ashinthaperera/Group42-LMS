@@ -8,7 +8,7 @@ export default function Deletestud (){
   const [student, setStudData] = useState([]);
   const fetchStudent =async()=>{
     const res = await axios.get(`http://localhost:5000/student/viewstud/${id}`);
-    console.log(res);
+    console.log(res.data);
     setStudData(res.data) //magic
   }
 
@@ -23,13 +23,12 @@ export default function Deletestud (){
     if(response===true){
       const res =await axios.delete(`http://localhost:5000/student/deletestud/${id}`);
 
-      // const res =await axios.delete(`http://localhost:5000/user/deleteUser/${id}`);
-
       console.log(res);
     if(res.status ===200){
       alert("Data Updated")
       window.location ="/student";
     }
+     
     //   if(res.status===200){
     //     fetchStudent();
     //   }
@@ -38,6 +37,44 @@ export default function Deletestud (){
       fetchStudent();
     }
   }
+  
+const handleuserDelete = async(email)=>{
+    const response = window.confirm("Are you sure you want to delete that?");
+    console.log('email',  email)
+    //alert(response);
+    if(response===true){
+      const userRes =await axios.delete(`http://localhost:5000/user/deleteUser`, email, {
+        withCredentials: true
+      });   
+
+      console.log(userRes);
+    if(userRes.status ===200){
+      alert("Data Updated")
+      window.location ="/student";
+    }
+     
+    //   if(res.status===200){
+    //     fetchStudent();
+    //   }
+    }
+    else{
+      fetchStudent();
+    }
+  }
+
+  const handleButtonClick = async(e)=>{
+    try {
+      e.preventDefault();
+      alert("hi")
+       //await handleDelete(student._id);
+       await handleuserDelete(student.email);
+      // window.location = "/student"
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle errors as needed
+    }
+  };
+
 
     return(
 
@@ -74,7 +111,8 @@ export default function Deletestud (){
             <br/>
             <br/>
             <NavLink className="btn btn-primary" to="/student">Back to List</NavLink>
-            <NavLink className="btn btn-danger me-3" onClick={()=> handleDelete(student._id)}>Delete</NavLink>
+            {/* <NavLink className="btn btn-danger me-3" onClick={()=> handleDelete(student._id)}>Delete</NavLink> */}
+            <NavLink className="btn btn-danger me-3" onClick={handleButtonClick }>Delete</NavLink>
         </div>
         </>
 
