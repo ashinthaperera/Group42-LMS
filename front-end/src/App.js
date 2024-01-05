@@ -1,9 +1,9 @@
 import "./App.css";
-import {
-  Route,
-  Routes,
-  BrowserRouter,
-} from "react-router-dom";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { FiSettings } from "react-icons/fi";
+import { TooltipComponent } from "@syncfusion/ej2-react-popups";
+import CssBaseline from "@mui/material/CssBaseline";
+
 import Allstud from "./Component/Student/Allstud";
 import Navbar from "./Component/Navbar";
 import Addstud from "./Component/Student/Addstud";
@@ -23,11 +23,14 @@ import Deletemod from "./Component/Module/Deletemod";
 import Addmod from "./Component/Module/Addmod";
 import Viewmod from "./Component/Module/Viewmod";
 import LecMaterial from "./Component/LecMaterial";
-
+import ModSubmission from "./Component/ModSubmission";
+import Login from "./pages/Login/LoginPage";
+import StudModSubmission from "./Component/StudModSubmission";
 
 function App() {
   return (
     <>
+      <CssBaseline />
       <BrowserRouter>
         <h1>React APP</h1>
         <Navbar />
@@ -51,6 +54,10 @@ function App() {
           <Route path="/module/deletemod/:id" element={<Deletemod />} />
 
           <Route path="/file/" element={<LecMaterial />} />
+          <Route path="/modulefile/" element={<ModSubmission />} />
+          <Route path="/studentfile/" element={<StudModSubmission />} />
+
+          <Route path="/" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </>

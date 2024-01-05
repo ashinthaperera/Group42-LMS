@@ -5,8 +5,9 @@ export default function Addlec (){
   const [inputval,setInputval] = useState ({ //in the start the details will empty
     firstName:"",
     lastName:"",
-    contactNumber:"",
     email:"",
+    password:"",
+    contactNumber:"",
     role:"",
   })
 
@@ -23,7 +24,7 @@ export default function Addlec (){
 
     //after the api works (through postman checking)
     const addLecData =async(e)=>{
-      e.preventDefault();
+      // e.preventDefault();
 
       //magic
       const {firstName,lastName,contactNumber,email,role}=inputval;
@@ -50,6 +51,45 @@ export default function Addlec (){
 
         console.log(data);
         alert("Data Added")
+        // window.location ="/lecturer";
+        //this if isnt working
+        if(res.status ===200){
+          alert("Data Added")
+          // window.location ="/lecturer";
+        }
+      }
+
+    }
+
+    const addLecUserData =async(e)=>{
+      // e.preventDefault();
+
+      //magic
+      const {firstName,lastName,email,password}=inputval;
+      const role = "lecturer"
+      //insert route url of the addstud of the backend (see the backend port is similar to link's port)
+      const res = await fetch("http://localhost:5000/user/register",{  
+          method:"POST",
+          headers:{
+            "Content-Type" : "application/json"
+          },
+          body : JSON.stringify({
+            firstName,lastName,email,password,role
+          })
+      });
+
+      const data =await res.json();
+      console.log(data);
+
+      //validation
+      if(res.status ===422 || !data){
+        alert("Error");
+      }
+      else{
+        setInputval(data);
+
+        console.log(data);
+        alert("Data Added")
         window.location ="/lecturer";
         //this if isnt working
         if(res.status ===200){
@@ -59,6 +99,20 @@ export default function Addlec (){
       }
 
     }
+
+    const handleButtonClick = async(e)=>{
+      try {
+        e.preventDefault();
+        alert("hi")
+         await addLecData();
+         await addLecUserData();
+        // window.location = "/student"
+      } catch (error) {
+        console.error('Error:', error);
+        // Handle errors as needed
+      }
+    };
+
 
     return(
 
@@ -81,11 +135,11 @@ export default function Addlec (){
                   aria-describedby="emailHelp"/>
           </div>
           <div class="mb-3">
-                  <label htmlFor="exampleInputEmail1" class="form-label">Student contactNumber</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1"
-                    name="contactNumber" onChange={setData} value={inputval.contactNumber}
-                  aria-describedby="emailHelp"/>
-          </div>
+                <label htmlFor="exampleInputEmail1" class="form-label">Lecturer Password</label>
+                <input type="password" class="form-control" id="exampleInputpassword"
+                  name="password" onChange={setData} value={inputval.password} //magic
+                aria-describedby="emailHelp"/>
+        </div>
           <div class="mb-3">
                   <label htmlFor="exampleInputEmail1" class="form-label">Student email</label>
                   <input type="text" class="form-control" id="exampleInputEmail1"
@@ -93,12 +147,19 @@ export default function Addlec (){
                   aria-describedby="emailHelp"/>
           </div>
           <div class="mb-3">
+                  <label htmlFor="exampleInputEmail1" class="form-label">Student contactNumber</label>
+                  <input type="text" class="form-control" id="exampleInputEmail1"
+                    name="contactNumber" onChange={setData} value={inputval.contactNumber}
+                  aria-describedby="emailHelp"/>
+          </div>
+          
+          <div class="mb-3">
                   <label htmlFor="exampleInputEmail1" class="form-label">Student role</label>
                   <input type="text" class="form-control" id="exampleInputEmail1"
                     name="role" onChange={setData} value={inputval.role}
                   aria-describedby="emailHelp"/>
           </div>
-          <button className="btn btn-primary" onClick={addLecData} >Add Lecturer</button>
+          <button className="btn btn-primary" onClick={handleButtonClick} >Add Lecturer</button>
           </form>
         </div>
       </>
