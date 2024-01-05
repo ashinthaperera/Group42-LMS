@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 
+const cookieParser = require("cookie-parser");
 const app = express();
 //const cors = require('cors');
 
@@ -21,6 +22,8 @@ app.use(
     origin: ["http://localhost:3000", "your-production-domain"],
   })
 );
+
+app.use(cookieParser());
 
 //add schema | add student model
 const students = require("./models/studSchema");

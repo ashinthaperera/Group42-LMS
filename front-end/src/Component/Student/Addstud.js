@@ -48,7 +48,7 @@ export default function Addstud() {
       // e.preventDefault();
 
       //magic
-      const {firstName,lastName,address,dob,contactNumber}=inputval;
+      const {firstName,lastName,email,address,dob,contactNumber}=inputval;
       //insert route url of the addstud of the backend (see the backend port is similar to link's port)
       const res = await fetch("http://localhost:5000/student/addstud",{  
           method:"POST",
@@ -56,7 +56,7 @@ export default function Addstud() {
             "Content-Type" : "application/json"
           },
           body : JSON.stringify({
-            firstName,lastName,address,dob,contactNumber
+            firstName,lastName,email,address,dob,contactNumber
           })
       });
 
@@ -90,35 +90,37 @@ export default function Addstud() {
       const {firstName,lastName,email,password}=inputval;
       const role = "student"
       //insert route url of the addstud of the backend (see the backend port is similar to link's port)
-      const res = await fetch("http://localhost:5000/user/register",{  
-          method:"POST",
-          headers:{
-            "Content-Type" : "application/json"
-          },
-          body : JSON.stringify({
-            firstName,lastName,email,password,role
-          })
-      });
 
-      const data =await res.json();
-      console.log(data);
-
-      //validation
-      if(res.status ===422 || !data){
-        alert("Error");
-      }
-      else{
-        setInputval(data);
-
+        const res = await fetch("http://localhost:5000/user/register",{  
+            method:"POST",
+            headers:{
+              "Content-Type" : "application/json"
+            },
+            body : JSON.stringify({
+              firstName,lastName,email,password,role
+            })
+        });
+  
+        const data =await res.json();
         console.log(data);
-        alert("Data Added")
-        window.location ="/student";
-        //this if isnt working
-        if(res.status ===200){
+  
+        //validation
+        if(res.status ===422 || !data){
+          alert("Error");
+        }
+        else{
+          setInputval(data);
+  
+          console.log(data);
           alert("Data Added")
           window.location ="/student";
+          //this if isnt working
+          if(res.status ===200){
+            alert("Data Added")
+            window.location ="/student";
+          }
         }
-      }
+      
 
     }
 

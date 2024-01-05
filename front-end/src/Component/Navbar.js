@@ -1,13 +1,14 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { logoutUserAction } from "../redux/user/userSlice";
+import { logoutUserAction, selectUser } from "../redux/user/userSlice";
 import { Button, Stack } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Navbar() {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector(selectUser);
+  console.log("user", user);
   const logoutFun = () => {
     dispatch(logoutUserAction({ navigate }));
   };
@@ -83,15 +84,16 @@ export default function Navbar() {
             </li>
           </ul>
         </div>
-        <div className="logout">
+        {user.email && (
+          <div className="logout">
             <Stack spacing={2} direction="row">
               <Button variant="contained" id="logoutBtn" onClick={logoutFun}>
-                Log Out
+                log out
               </Button>
             </Stack>
           </div>
+        )}
       </div>
-
     </nav>
   );
 }

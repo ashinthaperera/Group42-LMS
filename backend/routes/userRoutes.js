@@ -6,6 +6,7 @@ const {
   logoutUser,
   registerUser,
   deleteUser,
+  getLogedUser,
 } = require("../controllers/userController");
 const {
   loginUserRules,
@@ -20,8 +21,9 @@ const userRouter = express.Router();
 userRouter
    .route("/register")
    .post(registerUserRules(), userValidation, registerUser);
-userRouter.route("/deleteUser/:id").put(loginUserRules(), userValidation) .delete(deleteUser);
 userRouter.route("/login").post(loginUserRules(), userValidation, loginUser);
 userRouter.route("/logout").get(authorization, logoutUser);
+userRouter.route("/deleteUser").delete(deleteUser)
+userRouter.route("/getUser").get(getLogedUser)
 
 module.exports =  userRouter;

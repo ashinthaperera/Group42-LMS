@@ -2,6 +2,7 @@ const User = require("../models/userEntity");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { config } = require("../utils/config");
+const { Error } = require("mongoose");
 
 const createUserService = async (data) => {
   try {
@@ -14,11 +15,12 @@ const createUserService = async (data) => {
   }
 };
 
-//delete student
-const deleteUserService = async (id) => {
+
+const deleteUserService = async (email) => {
   try {
-    return await User.findByIdAndDelete({ _id: id });
+    return await User.findOneAndDelete({ email : email });
   } catch (err) {
+    console.log("delete", err)
     return { err: "Error with Deleting Student" };
   }
 };
@@ -62,4 +64,23 @@ const createToken = (user) => {
   };
 };
 
-module.exports = { loginUserService, createToken, createUserService, deleteUserService};
+const getLogedUserService= async(accToken)=> {
+  try {
+    const verifyAccToken = jwt.verify(accToken, config.jwt_secret_key);
+    if (!verifyAccToken) {
+      console.log('Unauthorized');
+    } else {
+      
+      const userEmail = verifyAccToken.email;
+      const findUser = await User.findOne({
+        email: userEmail,
+      });
+      return findUser;
+    }
+  } catch (err) {
+    console.log('Get User Error ', err);
+    return { err: 'Cannot find User' };
+  }
+}
+
+module.exports = { loginUserService, createToken, createUserService, deleteUserService, getLogedUserService};
