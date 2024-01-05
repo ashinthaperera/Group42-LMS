@@ -1,15 +1,15 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
 
-const lecMaterialRouter = express.Router();
+const studModuleSubRouter = express.Router();
 const app = express();
 
 const multer = require("multer");
-// const upload = multer({dest:"./files"}); do this and comment it
+//const upload = multer({dest:"./studmodSubfiles"}); //do this and comment it
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, "./files"); //file loc
+      cb(null, "./studmodSubfiles"); //file loc
     },
     filename: function (req, file, cb) {
       const uniqueSuffix = Date.now();
@@ -17,14 +17,13 @@ const storage = multer.diskStorage({
     },
   });
 
-
-const files = require('../models/lectureMaterial');
-require("../models/lectureMaterial");
-const PdfSchema = mongoose.model("LectureMaterial"); //name of collection
+const files = require('../models/studentSubmission');
+require("../models/studentSubmission");
+const PdfSchema = mongoose.model("StudentSubmission"); //name of collection
 
 const upload = multer({ storage: storage });//location where the files will be stored
 
-lecMaterialRouter.post("/upload-files", upload.single("file"), async (req, res) => {
+studModuleSubRouter.post("/studmodulesub/upload-studmodSubfiles", upload.single("file"), async (req, res) => {
     
     try {
       // const addfile = new files({});
@@ -38,8 +37,9 @@ lecMaterialRouter.post("/upload-files", upload.single("file"), async (req, res) 
     const title = req.body.title;
     const description = req.body.description;
     const fileName = req.file.filename; 
+    // const dueDate = req.body.dueDate;
     const dateUploaded = req.body.dateUploaded;
-
+    console.log(fileName);
   // const title = req.body.title;
   // const fileName = req.file.filename;
   console.log(moduleName,title,description,fileName,dateUploaded);
@@ -52,7 +52,8 @@ lecMaterialRouter.post("/upload-files", upload.single("file"), async (req, res) 
     }
 });
 
-lecMaterialRouter.get("/get-files",async (req,res)=>{
+
+studModuleSubRouter.get("/studmodulesub/get-studmodSubfiles",async (req,res)=>{
     try{
         PdfSchema.find({}).then((data)=>{
             res.send({status : "ok", data : data});
@@ -62,11 +63,11 @@ lecMaterialRouter.get("/get-files",async (req,res)=>{
     }
 });
 
-lecMaterialRouter.get("/",async(req,res)=>{
+studModuleSubRouter.get("/studmodulesub/",async(req,res)=>{
     res.send("Success!!!");
 });
 
-lecMaterialRouter.delete("/deletefile/:id",async(req,res)=>{
+studModuleSubRouter.delete("/studmodulesub/deletefile/:id",async(req,res)=>{
   try{
       const id = req.params.id;
       const file = await files.findByIdAndDelete({_id:id});
@@ -76,4 +77,4 @@ lecMaterialRouter.delete("/deletefile/:id",async(req,res)=>{
   }
 })
 
-module.exports = lecMaterialRouter;
+module.exports = studModuleSubRouter;

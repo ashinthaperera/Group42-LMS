@@ -1,6 +1,7 @@
 import React, {useEffect,useState} from "react";
 import { NavLink, useParams } from "react-router-dom";
 import axios from "axios";
+import Header from "../Header";
 
 export default function Viewstud() {
 //get the parameters (id) from url and store them
@@ -30,6 +31,7 @@ const {id} = useParams();
   return (
     <>
       <div className="container mt-5">
+      {/* <Header category="Page" title="Customers" /> */}
         <NavLink className="btn btn-primary" to="/student">Home</NavLink>
         <div className="row mt-5" >
           <div className="col-md-6">

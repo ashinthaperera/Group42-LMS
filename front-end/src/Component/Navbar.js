@@ -1,7 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { logoutUserAction } from "../redux/user/userSlice";
+import { Button, Stack } from "@mui/material";
+import { useDispatch } from "react-redux";
 
 export default function Navbar() {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const logoutFun = () => {
+    dispatch(logoutUserAction({ navigate }));
+  };
+
   return (
     <nav className="navbar navbar-expand-lg bg-primary">
       <div className="container">
@@ -55,7 +65,33 @@ export default function Navbar() {
             </li>
           </ul>
         </div>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <Link className="nav-link text-white" to="/modulefile/">
+                Add Module-Submission
+              </Link>
+            </li>
+          </ul>
+        </div>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <Link className="nav-link text-white" to="/studentfile/">
+                Add Student Module-Submission
+              </Link>
+            </li>
+          </ul>
+        </div>
+        <div className="logout">
+            <Stack spacing={2} direction="row">
+              <Button variant="contained" id="logoutBtn" onClick={logoutFun}>
+                Log Out
+              </Button>
+            </Stack>
+          </div>
       </div>
+
     </nav>
   );
 }

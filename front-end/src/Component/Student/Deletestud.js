@@ -23,6 +23,8 @@ export default function Deletestud (){
     if(response===true){
       const res =await axios.delete(`http://localhost:5000/student/deletestud/${id}`);
 
+      // const res =await axios.delete(`http://localhost:5000/user/deleteUser/${id}`);
+
       console.log(res);
     if(res.status ===200){
       alert("Data Updated")

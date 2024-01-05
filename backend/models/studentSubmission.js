@@ -1,28 +1,13 @@
 const mongoose = require("mongoose");
 
-const studentSubmissionSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: [true, "Please provide a name"],
-        trim: true,
-        // maxlength: [20, "Name cannot be more than 20 characters"]
-    },
-    file: {
-        type: String,
-        required: [true, "Please provide a file"]
-    },
-    studentId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Student",
-        required: true,
-    },
-    moduleId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Module",
-        required: true,
-    }
-});
+const studentSubSchema = new mongoose.Schema({
+    moduleName:String,
+    title:String,
+    description:String,
+    pdf:String,
+    dateUploaded:Date,
+},{collection:"StudentSubmission"});
 
-const StudentSubmission = mongoose.model("StudentSubmission", studentSubmissionSchema);
+const StudentSubmission = mongoose.model("StudentSubmission", studentSubSchema);
 
 module.exports = StudentSubmission;
