@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-
-const lecturerSchema = new mongoose.Schema({
+const studentSchema = new mongoose.Schema({
+ 
     firstName: {
         type: String,
         required: true,
@@ -12,25 +12,32 @@ const lecturerSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
     },
     password: {
         type: String,
         required: true,
     },
+    dob: {
+        type: Date,
+        required: true
+    },
     contactNumber: {
+        type: String,
+        required: false
+    },
+    address: {
         type: String,
         required: true,
     },
-    moduleName: {
-        type: mongoose.Schema.Types.Mixed,
-        ref: "moduleSchema",
+    degreeName: {
+        type: mongoose.Schema.Types.Mixed, 
+        ref: 'degree',
         required: true
     }
 
-})
+});
 
+const students = new mongoose.model("students",studentSchema);
 
-const lecturers = new mongoose.model("lecturers",lecturerSchema);
-
-module.exports=lecturers;
+module.exports=students;

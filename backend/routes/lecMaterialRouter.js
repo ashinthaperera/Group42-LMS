@@ -1,11 +1,12 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
+const path = require('path');
 
 const lecMaterialRouter = express.Router();
 const app = express();
 
 const multer = require("multer");
-// const upload = multer({dest:"./files"}); do this and comment it
+// const upload = multer({dest:"./files"});// do this and comment it
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -58,8 +59,12 @@ lecMaterialRouter.get("/get-files",async (req,res)=>{
             res.send({status : "ok", data : data});
         });
     }catch(error){
-
+        
     }
+});
+
+lecMaterialRouter.get("/file/view", (req, res) => {
+  res.sendFile(path.join(__dirname, 'C:/Users/Dell/Documents/Group42-LMS/front-end/public/index.html'));
 });
 
 lecMaterialRouter.get("/",async(req,res)=>{

@@ -22,7 +22,10 @@ import Editmod from "./Component/Module/Editmod";
 import Deletemod from "./Component/Module/Deletemod";
 import Addmod from "./Component/Module/Addmod";
 import Viewmod from "./Component/Module/Viewmod";
+
 import LecMaterial from "./Component/LecMaterial";
+import LecMaterialView from "./Component/LecMaterialView";
+
 import ModSubmission from "./Component/ModSubmission";
 import Login from "./pages/Login/LoginPage";
 import StudModSubmission from "./Component/StudModSubmission";
@@ -72,6 +75,7 @@ function App() {
 
           {/* <Route element ={<LecturerPrivateRoutes />} > */}
           <Route path="/file/" element={<LecMaterial />} />
+          <Route path="/file/view" element={<LecMaterialView />} />
           <Route path="/modulefile/" element={<ModSubmission />} />
           {/* </Route> */}
 

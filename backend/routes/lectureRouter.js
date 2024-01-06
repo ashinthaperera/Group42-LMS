@@ -1,46 +1,41 @@
 const express = require('express');
+const Lecturer = require('../models/lecturerSchema');
+
 
 const lecturerRouter = express.Router();
-const app = express();
 
-//utilizing the student model 
-const lecturers = require('../models/lecturerSchema');
 
-//post API to create a student
 lecturerRouter.post("/lecturer/addlec",async(req,res)=>{
 
-    const {firstName,lastName,contactNumber,email,role} = req.body;
+    const {firstName, lastName, email, password, contactNumber, moduleName} = req.body;
     
-    if(!firstName || !lastName || !contactNumber || !email || !role ){
+    if(!firstName || !lastName || !email || !password || !contactNumber || !moduleName ){
         res.status(404).json("please fill the Data");
     }
 
     try{
-        //check whether the data already exist
-        const prelec=await lecturers.findOne({contactNumber:contactNumber});
-        if(prelec){
+        
+        const lecturer=await Lecturer.findOne({contactNumber:contactNumber});
+        if(lecturer){
             res.status(404).json("This Lecture already present")
         }
-        //if the data doesnt exist then sent to the db
         else{
-        const addlecturer = new lecturers({firstName,lastName,contactNumber,email,role});
-        const lecData = await addlecturer.save();
+        const addlecturer = new Lecturer({firstName, lastName, email, password, contactNumber, moduleName});
+        const lecurerData = await addlecturer.save();
         console.log(addlecturer);
-        res.status(201).json(lecData);
+        res.status(201).json(lecurerData);
         }
-    }catch(err){
-        res.status(404).json(err);
+    }catch(error){
+        res.status(404).json(error);
     }
     
-})
+});
 
-//other method
-lecturerRouter.get("/lecturer/",async(req,res)=>{
+
+lecturerRouter.get("/lecturer",async(req,res)=>{
     try{
-        //retrieving the data from the db and storing it
-        const lecData =await lecturers.find({});
-        //sending the data to the frontend
-        res.send(lecData);
+        const lecurerData =await Lecturer.find({});
+        res.send(lecurerData);
     }catch (error){
         res.send(error);
     }
@@ -49,8 +44,8 @@ lecturerRouter.get("/lecturer/",async(req,res)=>{
 lecturerRouter.get("/lecturer/viewlec/:id", async (req,res)=>{
     try{
         const id =req.params.id;
-        const lec = await lecturers.findById({ _id : id });
-        res.send(lec)
+        const lecurer = await Lecturer.findById({ _id : id });
+        res.send(lecurer)
     }catch(error){
         res.send(error);
     }
@@ -59,24 +54,24 @@ lecturerRouter.get("/lecturer/viewlec/:id", async (req,res)=>{
 lecturerRouter.put("/lecturer/editlec/:id",async(req,res)=>{
     try{
         const id =req.params.id;
-        const lec = await lecturers.findByIdAndUpdate({_id : id }, req.body,{
+        const lecurer = await Lecturer.findByIdAndUpdate({_id : id }, req.body,{
             new:true,
         });
-        res.send(lec);
+        res.send(lecurer);
     }catch(error){
         res.send(error);
     }
-})
+});
 
 lecturerRouter.delete("/lecturer/deletelec/:id",async(req,res)=>{
     try{
         const id = req.params.id;
-        const lec = await lecturers.findByIdAndDelete({_id:id});
-        res.send(lec);
+        const lecurer = await Lecturer.findByIdAndDelete({_id:id});
+        res.send(lecurer);
     }catch(error){
         res.send(error);
     }
-})
+});
 
 
 module.exports = lecturerRouter;

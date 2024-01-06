@@ -5,7 +5,7 @@ const lecModuleSubRouter = express.Router();
 const app = express();
 
 const multer = require("multer");
-//const upload = multer({dest:"./modSubfiles"}); //do this and comment it
+// const upload = multer({dest:"./modSubfiles"}); //do this and comment it
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {

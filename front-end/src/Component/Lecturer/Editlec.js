@@ -1,54 +1,66 @@
 import axios from "axios";
 import React, {useEffect, useState}  from "react";
 import { Link, useParams } from "react-router-dom";
-// import students from "../../../backend/models/studSchema";
 
 export default function Editslec() {
   const [inputval,setInputval] =useState ({
     firstName:"",
     lastName:"",
-    contactNumber:"",
     email:"",
-    role:"",
+    password:"",
+    contactNumber:"",
+    moduleName:""
   });
 
-  const {id} = useParams()
-  // data single fetching 
+  const [moduleOptions, setModuleOptions] = useState([]);
+
+  useEffect( () => {
+    const fetchModuleCodes = async () => {
+      const moduleCodes = await fetch("http://localhost:5000/module");
+      
+      const data = await moduleCodes.json();
+      setModuleOptions(
+        data.map((module) => module.moduleName)
+      );
+    };
+    fetchModuleCodes();
+  }, []);
+
+  const handleModuleNameCodeChange = (e) => {
+    setInputval((prevVal) => ({
+      ...prevVal,
+      moduleName: e.target.value
+    }));
+  };
+
+  const {id} = useParams();
+
   const fetchLecturer =async()=>{
     const res = await axios.get(`http://localhost:5000/lecturer/viewlec/${id}`);
     console.log(res);
     setInputval({
       firstName:res.data.firstName,
       lastName:res.data.lastName,
-      contactNumber:res.data.contactNumber,
       email:res.data.email,
-      role:res.data.role,
-    }) //magic
-  }
+      password:res.data.password,
+      contactNumber:res.data.contactNumber,
+      moduleName:res.data.moduleName
+    });
+  };
 
   useEffect(()=>{
     fetchLecturer();
   }, []);
 
-  /*hooks*/
   const setData=(e)=>{
-    // console.log(e.target.value)
-    // const {name,value}=e.target;
-    // setInputval((preval)=>{
-    //   return{
-    //     ...preval,[name] :value
-    //   }
-    // })
     setInputval({
       ...inputval,[e.target.name]:e.target.value
     });
-  }
+  };
   
-   //after the api works (through postman checking)
    const updateStudData =async(e)=>{
     e.preventDefault();  
     console.log(inputval);
-    //data update
     const res =await axios.put(`http://localhost:5000/lecturer/editlec/${id}`, inputval);
 
     console.log(res);
@@ -65,38 +77,59 @@ export default function Editslec() {
         <Link className="btn btn-primary" to="/lecturer">Home</Link>
         <h3 className="mt-5">Edit Student Details</h3>
         <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Student Name</label>
-                <input type="text" class="form-control" id="exampleInputEmail1"
-                 name="firstName" onChange={setData} value={inputval.firstName}
-                aria-describedby="emailHelp"/>
+        <label htmlFor="exampleInputEmail1" class="form-label">First Name</label>
+        <input type="text" class="form-control" id="exampleInputEmail1"
+          name="firstName" onChange={setData} value={inputval.firstName}
+        aria-describedby="emailHelp"/>
+      </div>
+      <div class="mb-3">
+        <label htmlFor="exampleInputEmail1" class="form-label">Last Name</label>
+        <input type="text" class="form-control" id="exampleInputEmail1"
+          name="lastName" onChange={setData} value={inputval.lastName}
+        aria-describedby="emailHelp"/>
+      </div>
+      <div class="mb-3">
+        <label htmlFor="exampleInputEmail1" class="form-label">Email</label>
+        <input type="text" class="form-control" id="exampleInputEmail1"
+          name="email" onChange={setData} value={inputval.email}
+        aria-describedby="emailHelp"/>
+      </div>
+      <div class="mb-3">
+        <label htmlFor="exampleInputEmail1" class="form-label">Password</label>
+        <input type="text" class="form-control" id="exampleInputEmail1"
+          name="password" onChange={setData} value={inputval.password}
+        aria-describedby="emailHelp"/>
+      </div>
+      <div class="mb-3">
+        <label htmlFor="exampleInputEmail1" class="form-label">Contact Number</label>
+        <input type="text" class="form-control" id="exampleInputEmail1"
+          name="contactNumber" onChange={setData} value={inputval.contactNumber}
+        aria-describedby="emailHelp"/>
+      </div>
+      
+      <div className="mb-3">
+          <label htmlFor="moduleName" className="form-label">
+            Module
+          </label>
+          <select
+            className="form-select"
+            id="moduleName"
+            name="moduleName"
+            onChange={handleModuleNameCodeChange}
+            value={inputval.moduleName}
+          >
+            <option value="" disabled>Select Module</option>
+            {moduleOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+
+          </select>
         </div>
-        <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Lecture LName</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1"
-                   name="lastName" onChange={setData} value={inputval.lastName}
-                  aria-describedby="emailHelp"/>
-          </div>
-          <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Lecture mobile</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1"
-                 name="contactNumber" onChange={setData} value={inputval.contactNumber}     
-                 aria-describedby="emailHelp"/>
-          </div>
-          <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Lecture Email</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1"
-                  name="email" onChange={setData} value={inputval.email}
-                  aria-describedby="emailHelp"/>
-          </div>
-          <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Lecture Role</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1"
-                  name="role" onChange={setData} value={inputval.role}
-                  aria-describedby="emailHelp"/>
-          </div>
         <button className="btn btn-primary" onClick={updateStudData}>Update Lecuter</button>
         </form>
       </div>
     </>
   );
-}
+};

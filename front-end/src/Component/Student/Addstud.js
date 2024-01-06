@@ -1,40 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-//import axios from 'axios'; //other method
-//import { useNavigate } from "react-router-dom";
 
 export default function Addstud() {
-  /*other method*/
-  //   const [name, setName] = useState()
-  //   const [address, setAddress] = useState()
-  //   const [subject, setSubject] = useState()
-  //   const [mobile, setMobile] = useState()
-  //   const navigate = useNavigate()
 
-  //   const Submit =(e) =>{
-  //     e.preventDefault();
-  //     axios.post("http://localhost:5000/addstud",{name,address,subject,mobile})
-  //     .then(result => {
-  //       console.log(result)
-  //       navigate('/')
-  //     })
-  //     .catch(err => console.log(err))
-  //   }
-  /*end*/
-
-  const [inputval,setInputval] = useState ({ //in the start the details will empty
+  const [inputval,setInputval] = useState ({
     firstName:"",
     lastName:"",
-    email:"",
-    password:"",
     address:"",
     dob:"",
     contactNumber:"",
-  })
+    address:"",
+    degreeName:""
+  });
 
-  /*hooks*/
+  const [degreeOptions, setDegreeOptions] = useState([]);
+
+  useEffect( () => {
+    const fetchDegreeCodes = async () => {
+      const degreeCodes = await fetch("http://localhost:5000/degree");
+      
+      const data = await degreeCodes.json();
+      setDegreeOptions(
+        data.map((degree) => degree.degreeName)
+      );
+    };
+    fetchDegreeCodes();
+  }, []);
+
+  const handleDegreeNameCodeChange = (e) => {
+    setInputval((prevVal) => ({
+      ...prevVal,
+      degreeName: e.target.value
+    }));
+  };
+
+
   const setData=(e)=>{
-    // console.log(e.target.value)
     const {name,value}=e.target;
     setInputval((preval)=>{
       return{
@@ -43,32 +44,31 @@ export default function Addstud() {
     })
   }
 
-    //after the api works (through postman checking)
+
     const addStudData =async(e)=>{
       // e.preventDefault();
 
-      //magic
-      const {firstName,lastName,email,address,dob,contactNumber}=inputval;
-      //insert route url of the addstud of the backend (see the backend port is similar to link's port)
+      const {firstName, lastName, email, password, dob, contactNumber, address, degreeName}=inputval;
+      
       const res = await fetch("http://localhost:5000/student/addstud",{  
           method:"POST",
           headers:{
             "Content-Type" : "application/json"
           },
           body : JSON.stringify({
-            firstName,lastName,email,address,dob,contactNumber
+            firstName, lastName, email, password, dob, contactNumber, address, degreeName
           })
       });
 
       const data =await res.json();
       console.log(data);
 
-      //validation
+      
       if(res.status ===422 || !data){
         alert("Error");
       }
       else{
-        setInputval(data);
+        //setInputval(data);
 
         console.log(data);
         // alert("Data Added ")
@@ -81,15 +81,15 @@ export default function Addstud() {
         }
       }
 
-    }
+    };
 
     const addStudUserData =async(e)=>{
       // e.preventDefault();
 
-      //magic
+      
       const {firstName,lastName,email,password}=inputval;
       const role = "student"
-      //insert route url of the addstud of the backend (see the backend port is similar to link's port)
+      
 
         const res = await fetch("http://localhost:5000/user/register",{  
             method:"POST",
@@ -109,7 +109,7 @@ export default function Addstud() {
           alert("Error");
         }
         else{
-          setInputval(data);
+          //setInputval(data);
   
           console.log(data);
           alert("Data Added")
@@ -124,33 +124,15 @@ export default function Addstud() {
 
     }
 
-    // const handleButtonClick = () => {
-    //   addStudData();
-    //   addStudUserData();
-    // };
-
-    
-    // const fun1 = async (e) => {
-    //   // e.preventDefault();
-    //   console.log('hello');
-    //   alert("hi")
-    // }
-  
-    // const fun2 = async (e) => {
-    //   // e.preventDefault();
-    //   console.log('world');
-    //   window.location = "/"
-    // }
-
     const handleButtonClick = async(e)=>{
       try {
         e.preventDefault();
-        alert("hi")
+        alert("hi");
          await addStudData();
          await addStudUserData();
         // window.location = "/student"
       } catch (error) {
-        console.error('Error:', error);
+          console.error('Error:', error);
         // Handle errors as needed
       }
     };
@@ -163,47 +145,69 @@ export default function Addstud() {
         <Link className="btn btn-primary" to="/student">Home</Link>
         <h3 className="mt-5">Fill Student Details</h3>
         <div class="mb-3">
-                <label htmlFor="exampleInputEmail1" class="form-label">Student firstName</label>
-                <input type="text" class="form-control" id="exampleInputfirstName"
-                  name="firstName" onChange={setData} value={inputval.firstName} //magic
+                <label htmlFor="exampleInputEmail1" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="exampleInputEmail1"
+                  name="firstName" onChange={setData} value={inputval.firstName}
                 aria-describedby="emailHelp"/>
         </div>
         <div class="mb-3">
-                <label htmlFor="exampleInputEmail1" class="form-label">Student lastName</label>
-                <input type="text" class="form-control" id="exampleInputlastName"
-                  name="lastName" onChange={setData} value={inputval.lastName} //magic
+                <label htmlFor="exampleInputEmail1" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="exampleInputEmail1"
+                  name="lastName" onChange={setData} value={inputval.lastName}
                 aria-describedby="emailHelp"/>
         </div>
         {/**email */}
+        
         <div class="mb-3">
-                <label htmlFor="exampleInputEmail1" class="form-label">Student Email</label>
+                <label htmlFor="exampleInputEmail1" class="form-label">Email</label>
                 <input type="text" class="form-control" id="exampleInputEmail1"
-                  name="email" onChange={setData} value={inputval.email} //magic
+                  name="email" onChange={setData} value={inputval.email}
                 aria-describedby="emailHelp"/>
         </div>
         <div class="mb-3">
-                <label htmlFor="exampleInputEmail1" class="form-label">Student Password</label>
-                <input type="password" class="form-control" id="exampleInputpassword"
-                  name="password" onChange={setData} value={inputval.password} //magic
+                <label htmlFor="exampleInputEmail1" class="form-label">Password</label>
+                <input type="text" class="form-control" id="exampleInputEmail1"
+                  name="password" onChange={setData} value={inputval.password}
                 aria-describedby="emailHelp"/>
         </div>
         <div class="mb-3">
-                <label htmlFor="exampleInputEmail1" class="form-label">Student Address</label>
-                <input type="text" class="form-control" id="exampleInputaddress"
-                  name="address" onChange={setData} value={inputval.address}
-                aria-describedby="emailHelp"/>
-        </div>
-        <div class="mb-3">
-                <label htmlFor="exampleInputEmail1" class="form-label">Student dob</label>
-                <input type="date" class="form-control" id="exampleInputdob"
+                <label htmlFor="exampleInputEmail1" class="form-label">DOB</label>
+                <input type="date" class="form-control" id="exampleInputEmail1"
                   name="dob" onChange={setData} value={inputval.dob}
                 aria-describedby="emailHelp"/>
         </div>
         <div class="mb-3">
-                <label htmlFor="exampleInputEmail1" class="form-label">Student contactNumber</label>
-                <input type="text" class="form-control" id="exampleInputcontactNumber"
+                <label htmlFor="exampleInputEmail1" class="form-label">Contact Number</label>
+                <input type="text" class="form-control" id="exampleInputEmail1"
                   name="contactNumber" onChange={setData} value={inputval.contactNumber}
                 aria-describedby="emailHelp"/>
+        </div>
+        <div class="mb-3">
+                <label htmlFor="exampleInputEmail1" class="form-label">Address</label>
+                <input type="text" class="form-control" id="exampleInputEmail1"
+                  name="address" onChange={setData} value={inputval.address}
+                aria-describedby="emailHelp"/>
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="degreeName" className="form-label">
+            Degree
+          </label>
+          <select
+            className="form-select"
+            id="degreeName"
+            name="degreeName"
+            onChange={handleDegreeNameCodeChange}
+            value={inputval.degreeName}
+            >
+              <option value="" disabled>Select Degree</option>
+              {degreeOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+
+          </select>
         </div>
         <button className="btn btn-primary" 
         onClick={handleButtonClick}
