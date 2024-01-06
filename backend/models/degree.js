@@ -8,24 +8,12 @@ const degreeSchema = new mongoose.Schema({
     degreeType: {
         type: String,
         required: true,
-    },
-    facultyId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Faculty",
-        required: true,
     }
 
 
 });
 
-const Degree = mongoose.model('Degree', degreeSchema);
+const Degree = mongoose.model('degrees', degreeSchema);
 
 module.exports = Degree;
 
-/*
-articleId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Article",
-    required: true,
-  },
-*/

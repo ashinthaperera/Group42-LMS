@@ -5,13 +5,13 @@ import DataTable from "react-data-table-component";
 
 
 export default function Allmod() {
-
+  
   const [Modules, setModData] = useState([]);
   const fetchAllModules =async()=>{
     const res = await axios.get("http://localhost:5000/module");
     console.log(res);
-    setModData(res.data) //magic
-  }
+    setModData(res.data);
+  };
 
   useEffect(()=>{
     fetchAllModules();
@@ -45,6 +45,8 @@ export default function Allmod() {
         id : i+1,
         moduleCode : Modules?.moduleCode,
         moduleName : Modules?.moduleName,
+        degreeName : Modules?.degreeName,
+        firstName: Modules?.firstName,
         action : 
         [
           <NavLink className="btn btn-primary me-3" to={`module/viewmod/${Modules._id}`} >View</NavLink>,
@@ -81,7 +83,9 @@ export default function Allmod() {
             <tr className="table-success">
               <th scope="col">ID</th>
               <th scope="col">Module Code</th>
-              <th scope="col">Module Name</th>              
+              <th scope="col">Module Name</th>
+              <th scope="col">Degree</th> 
+              <th scope="col">Lecturer</th>                 
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -92,6 +96,8 @@ export default function Allmod() {
               <th scope="row">{i+1}</th>
               <td>{Modules?.moduleCode}</td> 
               <td>{Modules?.moduleName}</td>
+              <td>{Modules?.degreeName}</td>
+              <td>{Modules?.firstName}</td>
               <td>
                 <NavLink className="btn btn-primary me-3" to={`/module/viewmod/${Modules._id}`} >View</NavLink>
                 <NavLink className="btn btn-warning me-3" to={`/module/editmod/${Modules._id}`}>Edit</NavLink>

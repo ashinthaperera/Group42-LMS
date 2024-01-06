@@ -3,34 +3,31 @@ import React, { useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 
 export default function Deletemod (){
-    const {id} = useParams()
-  // data single fetching 
+  const {id} = useParams()
+  
   const [module, setModData] = useState([]);
   const fetchModule =async()=>{
     const res = await axios.get(`http://localhost:5000/module/viewmod/${id}`);
     console.log(res);
-    setModData(res.data) //magic
-  }
+    setModData(res.data);
+  };
 
   useEffect(()=>{
     fetchModule();
   }, []);
 
-  //data delete 
+
   const handleDelete = async(id)=>{
     const response = window.confirm("Are you sure you want to delete that?");
-    //alert(response);
+    
     if(response===true){
       const res =await axios.delete(`http://localhost:5000/module/deletemod/${id}`);
 
       console.log(res);
-    if(res.status ===200){
-      alert("Data Updated")
-      window.location ="/module/";
-    }
-    //   if(res.status===200){
-    //     fetchStudent();
-    //   }
+      if(res.status ===200){
+        alert("Data Updated")
+        window.location ="/module/";
+      }
     }
     else{
       fetchModule();
@@ -55,6 +52,14 @@ export default function Deletemod (){
                     <td>Module Name : </td>
                     <td>{module?.moduleName} </td>
                 </tr>
+                <tr>
+                    <td>Degree : </td>
+                    <td>{module?.degreeName} </td>
+                </tr>
+                <tr>
+                    <td>Lecturer : </td>
+                    <td>{module?.firstName} </td>
+                </tr>
                 
             </table>
             <br/>
@@ -65,6 +70,6 @@ export default function Deletemod (){
         </div>
         </>
 
-    )
+    );
 
-}
+};

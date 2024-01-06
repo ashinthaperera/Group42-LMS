@@ -1,54 +1,74 @@
 import axios from "axios";
 import React, {useEffect, useState}  from "react";
 import { Link, useParams } from "react-router-dom";
-// import students from "../../../backend/models/studSchema";
 
 export default function Editstud() {
   const [inputval,setInputval] =useState ({
     firstName:"",
     lastName:"",
-    address:"",
+    email:"",
+    password:"",
     dob:"",
     contactNumber:"",
+    address:"",
+    degreeName:""
   });
 
-  const {id} = useParams()
-  // data single fetching 
+  const [degreeOptions, setDegreeOptions] = useState([]);
+
+  useEffect( () => {
+    const fetchDegreeCodes = async () => {
+      const degreeCodes = await fetch("http://localhost:5000/degree");
+      
+      const data = await degreeCodes.json();
+      setDegreeOptions(
+        data.map((degree) => degree.degreeName)
+      );
+    };
+    fetchDegreeCodes();
+  }, []);
+
+  const handleDegreeNameCodeChange = (e) => {
+    setInputval((prevVal) => ({
+      ...prevVal,
+      degreeName: e.target.value
+    }));
+  };
+
+  const {id} = useParams();
+
   const fetchStudent =async()=>{
     const res = await axios.get(`http://localhost:5000/student/viewstud/${id}`);
-    console.log(res);
+    
+    const formattedDate = res.data.dob ? new Date(res.data.dob).toISOString().split('T')[0] : '';
     setInputval({
       firstName:res.data.firstName,
       lastName:res.data.lastName,
-      address:res.data.address,
-      dob:res.data.dob,
+      email:res.data.email,
+      password:res.data.password,
+      dob:formattedDate,
       contactNumber:res.data.contactNumber,
-    }) //magic
+      address:res.data.address,
+      degreeName:res.data.degreeName
+    })
   }
 
   useEffect(()=>{
     fetchStudent();
   }, []);
 
-  /*hooks*/
   const setData=(e)=>{
-    // console.log(e.target.value)
-    // const {name,value}=e.target;
-    // setInputval((preval)=>{
-    //   return{
-    //     ...preval,[name] :value
-    //   }
-    // })
+    
     setInputval({
       ...inputval,[e.target.name]:e.target.value
     });
   }
   
-   //after the api works (through postman checking)
+   
    const updateStudData =async(e)=>{
     e.preventDefault();  
     console.log(inputval);
-    //data update
+    
     const res =await axios.put(`http://localhost:5000/student/editstud/${id}`, inputval);
 
     console.log(res);
@@ -65,35 +85,69 @@ export default function Editstud() {
         <Link className="btn btn-primary" to="/student">Home</Link>
         <h3 className="mt-5">Edit Student Details</h3>
         <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Student firstName</label>
+                <label htmlFor="exampleInputEmail1" class="form-label">First Name</label>
                 <input type="text" class="form-control" id="exampleInputEmail1"
-                 name="firstName" onChange={setData} value={inputval.firstName}
+                  name="firstName" onChange={setData} value={inputval.firstName}
                 aria-describedby="emailHelp"/>
         </div>
         <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Student lastName</label>
+                <label htmlFor="exampleInputEmail1" class="form-label">Last Name</label>
                 <input type="text" class="form-control" id="exampleInputEmail1"
-                 name="lastName" onChange={setData} value={inputval.lastName}
+                  name="lastName" onChange={setData} value={inputval.lastName}
                 aria-describedby="emailHelp"/>
         </div>
         <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Student Address</label>
+                <label htmlFor="exampleInputEmail1" class="form-label">Email</label>
                 <input type="text" class="form-control" id="exampleInputEmail1"
-               name="address" onChange={setData} value={inputval.address}     
-               aria-describedby="emailHelp"/>
+                  name="email" onChange={setData} value={inputval.email}
+                aria-describedby="emailHelp"/>
         </div>
         <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Student dob</label>
+                <label htmlFor="exampleInputEmail1" class="form-label">Password</label>
+                <input type="text" class="form-control" id="exampleInputEmail1"
+                  name="password" onChange={setData} value={inputval.password}
+                aria-describedby="emailHelp"/>
+        </div>
+        <div class="mb-3">
+                <label htmlFor="exampleInputEmail1" class="form-label">DOB</label>
                 <input type="date" class="form-control" id="exampleInputEmail1"
-                name="dob" onChange={setData} value={inputval.dob}
+                  name="dob" onChange={setData} value={inputval.dob}
                 aria-describedby="emailHelp"/>
         </div>
         <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Student Mobile</label>
+                <label htmlFor="exampleInputEmail1" class="form-label">Contact Number</label>
                 <input type="text" class="form-control" id="exampleInputEmail1"
-                name="contactNumber" onChange={setData} value={inputval.contactNumber}
+                  name="contactNumber" onChange={setData} value={inputval.contactNumber}
                 aria-describedby="emailHelp"/>
         </div>
+        <div class="mb-3">
+                <label htmlFor="exampleInputEmail1" class="form-label">Address</label>
+                <input type="text" class="form-control" id="exampleInputEmail1"
+                  name="address" onChange={setData} value={inputval.address}
+                aria-describedby="emailHelp"/>
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="degreeName" className="form-label">
+            Degree
+          </label>
+          <select
+            className="form-select"
+            id="degreeName"
+            name="degreeName"
+            onChange={handleDegreeNameCodeChange}
+            value={inputval.degreeName}
+            >
+              <option value="" disabled>Select Degree</option>
+              {degreeOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+
+          </select>
+        </div>
+
         <button className="btn btn-primary" onClick={updateStudData}>Update Student</button>
         </form>
       </div>

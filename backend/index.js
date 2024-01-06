@@ -25,15 +25,14 @@ app.use(
 
 app.use(cookieParser());
 
-//add schema | add student model
-const students = require("./models/studSchema");
 
 //add router
 // const studRouter = require("./routes/studRouter");
 const studentRouter = require("./routes/studentRouter");
 const moduleRouter = require("./routes/moduleRouter");
-
 const lectureRouter = require("./routes/lectureRouter");
+const degreeRouter = require("./routes/degreeRouter");
+
 const lecMaterialRouter = require("./routes/lecMaterialRouter");
 const lecModuleSubRouter = require("./routes/lecModuleSubRouter");
 const studModuleSubRouter = require("./routes/studModuleSubRouter");
@@ -45,9 +44,12 @@ dotenv.config();
 app.use(express.json());
 
 // //use router
+
 app.use(studentRouter);
-app.use(lectureRouter);
 app.use(moduleRouter);
+app.use(lectureRouter);
+app.use(degreeRouter);
+
 app.use(lecMaterialRouter);
 app.use(lecModuleSubRouter);
 app.use(studModuleSubRouter);
