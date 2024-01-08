@@ -13,6 +13,7 @@ export default function LecMaterial (){
     useEffect(()=>{
         getPdf();
     },[]);
+    
     const getPdf = async ()=>{ //get the data from the backend
         const result = await axios.get("http://localhost:5000/get-files");
         console.log(result.data.data);

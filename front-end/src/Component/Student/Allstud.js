@@ -33,7 +33,7 @@ export default function Allstud() {
               <th scope="col">First Name</th>
               <th scope="col">Last Name</th>
               <th scope="col">Email</th>
-              <th scope="col">Password</th>
+              {/* <th scope="col">Password</th> */}
               <th scope="col">DOB</th>
               <th scope="col">Contact Number</th>
               <th scope="col">Address</th>
@@ -49,7 +49,7 @@ export default function Allstud() {
               <td>{student?.firstName}</td> 
               <td>{student?.lastName}</td>
               <td>{student?.email}</td>
-              <td>{student?.password}</td>
+              {/* <td>{student?.password}</td> */}
               <td>{student?.dob}</td>
               <td>{student?.contactNumber}</td>
               <td>{student?.address}</td>

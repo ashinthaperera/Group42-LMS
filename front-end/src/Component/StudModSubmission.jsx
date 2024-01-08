@@ -4,7 +4,6 @@ import axios from "axios";
 const StudModSubmission = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [reloadPage, setReloadPage] = useState(false);
 
@@ -39,33 +38,40 @@ const StudModSubmission = () => {
     }
   }, [reloadPage]);
 
+  useEffect(()=>{
+    getPdf();
+},[]);
   //description, file, dateUploaded, allImage moduleName:String,
   // title:String,
   // description:String,
   // pdf:String,
   // dateUploaded:Date,
 
-  const getItems = async () => {
+  const getPdf = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(
+      const result = await axios.get(
         "http://localhost:5000/studmodulesub/get-studmodSubfiles"
       );
-      setItems(res.data.items);
 
+      const reversedData = result.data.data.slice().reverse();
+
+    // Display only the last submitted file
+    setAllTmage(reversedData.length > 0 ? [reversedData[0]] : []);
+
+      // setItems(result.data.items);
+      // setAllTmage(result.data.data.slice()); //remove the one to show all files
+        
       setLoading(false);
 
-      console.log(res.data.items);
+      console.log(result.data.items);
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    getItems();
-  }, []);
 
-  const addItem = async (e) => {
+  const submitImage = async (e) => {
     e.preventDefault();
     try {
       const formData = new FormData();
@@ -81,42 +87,51 @@ const StudModSubmission = () => {
         formData
       );
       console.log(item);
+
       if (item.data.status === "ok") {
         alert("You have submitted successfully!");
-        viewItem();
+        // viewItem();
+        setModuleName("");
+        setTitle("");
+        setDescription("");
+        setDateUploaded("");
+  
+        moduleNameInputRef.current.value = "";
+        titleInputRef.current.value = "";
+        descriptionInputRef.current.value = "";
+        dateUploadedInputRef.current.value = "";
+  
+        fileInputRef.current.value = null;
+  
+        setUploadSuccess(true);
+        // getPdf();
       }
 
-      setModuleName("");
-      setTitle("");
-      setDescription("");
-      setDateUploaded("");
-
-      moduleNameInputRef.current.value = "";
-      titleInputRef.current.value = "";
-      descriptionInputRef.current.value = "";
-      dateUploadedInputRef.current.value = "";
-
-      fileInputRef.current.value = null;
-
-      setUploadSuccess(true);
+     
     } catch (error) {
       console.log(error);
     }
   };
 
-  const viewItem = (itemId) => {
+  const showPdf = (itemId) => {
     window.open(
-      `http://localhost:5000/api/v1/items/view/${itemId}`,
+      `http://localhost:5000/studmodSubfiles/${itemId}`,
       "_blank",
       "noreferrer"
     );
   };
 
-  const deleteItem = async (itemId) => {
+  const handleDelete = async (itemId) => {
     try {
-      await axios.delete(
-        `http://localhost:5000/studmodulesub/deletefile/${itemId}`
-      );
+      const response = window.confirm("Are you sure you want to do that?");
+    alert(response);
+    if(response===true){
+      const res =await axios.delete(`http://localhost:5000/studmodulesub/deletefile/${itemId}`);
+      if(res.status ===200){
+        alert("Data Updated")
+        window.location ="/studentfile";
+      }
+    }
 
       console.log("Item removed successfully");
     } catch (error) {
@@ -195,7 +210,7 @@ const StudModSubmission = () => {
             <button
               type="button"
               class="btn btn-success mx-5"
-              onClick={addItem}
+              onClick={submitImage}
             >
               Upload
             </button>
@@ -206,7 +221,7 @@ const StudModSubmission = () => {
           </div>
         </form>
 
-        <div className="items">
+        {/* <div className="items">
           {items &&
             items.map((item) => (
               <div className="item" key={item._id}>
@@ -227,7 +242,29 @@ const StudModSubmission = () => {
                 </button>
               </div>
             ))}
+        </div> */}
+
+<div className="uploaded">
+        <h4>Uploaded PDF:</h4>
+        <div className="output-div">
+          {allImage == null
+            ? ""
+            : allImage.map((data) => {
+                return (
+                  <div className="inner-div">
+                    <h6>Title: {data.title}</h6>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => showPdf(data.pdf)}
+                    >
+                      Show Pdf
+                    </button>
+                     <button className="btn btn-danger me-3" onClick={()=> handleDelete(data._id)}>Delete</button> 
+                  </div>
+                );
+              })}
         </div>
+      </div>
       </div>
     </>
   );

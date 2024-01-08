@@ -4,10 +4,10 @@ import { NavLink, useParams } from 'react-router-dom';
 
 export default function Deletestud (){
   const {id} = useParams();
-  const {email} = useParams();
+  // const {email} = useParams();
   
   const [student, setStudent] = useState([]);
-  const [user, setUser] = useState([]);
+  // const [user, setUser] = useState([]);
   const   fetchStudent =async()=>{
     const res = await axios.get(`http://localhost:5000/student/viewstud/${id}`);
     console.log(res);
@@ -19,19 +19,20 @@ export default function Deletestud (){
   }, []);
 
 
-  const fetchUser =async()=>{
-    const res = await axios.get(`http://localhost:5000/deleteUser${email}`);
-    console.log(res);
-    setUser(res.data);
-  };
+  // const fetchUser =async()=>{
+  //   const res = await axios.get(`http://localhost:5000/deleteUser${email}`);
+  //   console.log(res);
+  //   setUser(res.data);
+  // };
 
-  useEffect(()=>{
-    fetchUser();
-  }, []);
+  // useEffect(()=>{
+  //   fetchUser();
+  // }, []);
 
    
   const handleDelete = async(id)=>{
     const response = window.confirm("Are you sure you want to delete that?");
+    try {
     if(response===true){
       const res =await axios.delete(`http://localhost:5000/student/deletestud/${id}`);
 
@@ -45,36 +46,41 @@ export default function Deletestud (){
       else{
         fetchStudent();
       }
+      
     };
-  };
-  
-const handleuserDelete = async(email)=>{
-  const response = window.confirm("Are you sure you want to delete that?");
-    //alert(response);
-  if(response===true){
-    const userRes =await axios.delete(`http://localhost:5000/user/deleteUser/${email}`);   
-
-    console.log(userRes);
-    if(userRes.status ===200){
-      alert("Data Updated")
-      window.location ="/student";
-    }
   }
-  else{
-    fetchStudent();
-  }
-};
-
-const handleButtonClick = async(e)=>{
-  try {
-    e.preventDefault();
-    alert("hi");
-    await handleDelete(student._id);
-    await handleuserDelete(user.email);
-  } catch (error) {
+  catch (error) {
     console.error('Error:', error);
   }
-};
+  };
+  
+// const handleuserDelete = async(email)=>{
+//   const response = window.confirm("Are you sure you want to delete that?");
+//     //alert(response);
+//   if(response===true){
+//     const userRes =await axios.delete(`http://localhost:5000/user/deleteUser/${email}`);   
+
+//     console.log(userRes);
+//     if(userRes.status ===200){
+//       alert("Data Updated")
+//       window.location ="/student";
+//     }
+//   }
+//   else{
+//     fetchStudent();
+//   }
+// };
+
+// const handleButtonClick = async(e)=>{
+//   try {
+//     e.preventDefault();
+//     alert("hi");
+//     await handleDelete(student._id);
+//     //await handleuserDelete(user.email);
+//   } catch (error) {
+//     console.error('Error:', error);
+//   }
+// };
 
 
     return(
@@ -124,7 +130,7 @@ const handleButtonClick = async(e)=>{
             <br/>
             <br/>
             <NavLink className="btn btn-primary" to="/student">Back to List</NavLink>
-            <NavLink className="btn btn-danger me-3" onClick={handleButtonClick }>Delete</NavLink>
+            <NavLink className="btn btn-danger me-3" onClick={handleDelete }>Delete</NavLink>
         </div>
         </>
 

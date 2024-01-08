@@ -103,6 +103,7 @@ function Login() {
     console.log("Password ", password);
 
     dispatch(loginUserAction({ email, password, navigate }));
+    window.location.href = '/student';
   };
 
   return (

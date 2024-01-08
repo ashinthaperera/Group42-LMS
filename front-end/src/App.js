@@ -36,9 +36,10 @@ import { getUserAction, refreshAction } from "./redux/user/userSlice";
 import { AdminPrivateRoutes } from "./routes/privateRouteAdmin";
 import { LecturerPrivateRoutes } from "./routes/privateRouteLecturer";
 import { StudentPrivateRoutes } from "./routes/privateRouteStudent";
-import { LoggedPrivateRoutes } from "./routes/privateRoutes";
+import ModSubmissionView from "./Component/ModSubmissionView";
 // import AdminPrivateRoutes from "./routes/privateRoutes";
-
+import LoggedPrivateRoutes from "./routes/privateRoutes";
+import StudModSubView from "./Component/StudModSubView";
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -54,7 +55,7 @@ function App() {
           <Route path="/" element={<Login />} />
 
           {/* <Route element={<LoggedPrivateRoutes />}> */}
-          
+
           <Route path="/student/" element={<Allstud />} />
           <Route path="/student/addstud" element={<Addstud />} />
           <Route path="/student/editstud/:id" element={<Editstud />} />
@@ -75,12 +76,15 @@ function App() {
 
           {/* <Route element ={<LecturerPrivateRoutes />} > */}
           <Route path="/file/" element={<LecMaterial />} />
-          <Route path="/file/view" element={<LecMaterialView />} />
+          <Route path="/studentfile/view" element={<StudModSubView />} />
           <Route path="/modulefile/" element={<ModSubmission />} />
           {/* </Route> */}
 
           {/* <Route element ={<StudentPrivateRoutes />} > */}
           <Route path="/studentfile/" element={<StudModSubmission />} />
+          <Route path="/file/view" element={<LecMaterialView />} />
+          <Route path="/modulefile/view" element={<ModSubmissionView />} />
+
           {/* </Route> */}
           {/* </Route> */}
         </Routes>

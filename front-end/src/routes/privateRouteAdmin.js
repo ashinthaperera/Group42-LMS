@@ -5,7 +5,7 @@ import { selectUser } from "../redux/user/userSlice";
 export const AdminPrivateRoutes = () => {
     const user = useSelector(selectUser);
 
-  if (user.role === 'admin') {
+  if (user.role) {
     return <Outlet />;
   } else {
     return <Navigate to="/" replace />;

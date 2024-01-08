@@ -2,16 +2,17 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/user/userSlice";
 
-export const LoggedPrivateRoutes = () => {
-    const user = useSelector(selectUser);
-
+const LoggedPrivateRoutes = () => {
+  const user = useSelector(selectUser);
+  console.log("user", user);
   if (user.role) {
     return <Outlet />;
   } else {
     return <Navigate to="/" replace />;
   }
-  
 };
+
+export default LoggedPrivateRoutes;
 
 // export const LecturerPrivateRoutes = ()=>{
 //     const user = useSelector(selectUser);
@@ -32,4 +33,3 @@ export const LoggedPrivateRoutes = () => {
 //       return <Navigate to="/" replace />;
 //     }
 // }
-

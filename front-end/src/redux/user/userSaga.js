@@ -19,7 +19,7 @@ import {
       const response = yield call(loginUserService, payload);
       if (response) {
         payload.navigate("/student/");
-        window.location.reload(false);
+        window.location.reload(false); //coment
       } else {
         alert("Login Failed! Please Enter Valid Email & Password");
       }
@@ -43,7 +43,7 @@ import {
       const response = yield call(logoutUserService);
       if (response) {
         payload.navigate("/"); //logout location
-        window.location.reload(false);
+        window.location.reload(false); //comment
       } else {
         alert("Your Session is Expired");
         payload.navigate("/");
